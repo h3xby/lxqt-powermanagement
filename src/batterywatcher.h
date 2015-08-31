@@ -30,6 +30,7 @@
 #include "watcher.h"
 #include "trayicon.h"
 #include "batteryinfodialog.h"
+#include "backlight/backlight.h"
 #include "../config/powermanagementsettings.h"
 
 #include <Solid/Battery>
@@ -42,14 +43,17 @@ public:
     virtual ~BatteryWatcher();
 
 private slots:
+    void energyChanged();
     void batteryChanged();
     void settingsChanged();
+    void updateBacklightLevel();
 
 private:
     QList<Solid::Battery*> mBatteries;
     QList<TrayIcon*> mTrayIcons;
 
     PowerManagementSettings mSettings;
+    Backlight *mBacklight;
     BatteryInfoDialog *mBatteryInfoDialog;
 };
 

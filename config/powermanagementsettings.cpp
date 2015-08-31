@@ -47,6 +47,8 @@ namespace PowerManagementSettingsConstants
     const QString USE_THEME_ICONS_KEY = "useThemeIcons";
     const QString IDLENESS_ACTION_KEY = "idlenessAction";
     const QString IDLENESS_TIME_SECS_KEY = "idlenessTimeSecs";
+    const QString BACKLIGHT_BATTERY_LEVEL_KEY = "backlightBatteryLevel";
+    const QString BACKLIGHT_AC_LEVEL_KEY = "backlightACLevel";
 }
 
 using namespace PowerManagementSettingsConstants;
@@ -222,4 +224,22 @@ void PowerManagementSettings::setIdlenessWatcherEnabled(bool idlenessWatcherEnab
     setValue(ENABLE_IDLENESS_WATCHER_KEY, idlenessWatcherEnabled);
 }
 
+int PowerManagementSettings::getBacklightACLevel()
+{
+    return value(BACKLIGHT_AC_LEVEL_KEY, 100).toInt();
+}
 
+void PowerManagementSettings::setBacklightACLevel(int level)
+{
+    setValue(BACKLIGHT_AC_LEVEL_KEY, level);
+}
+
+int PowerManagementSettings::getBacklightBatteryLevel()
+{
+    return value(BACKLIGHT_BATTERY_LEVEL_KEY, 70).toInt();
+}
+
+void PowerManagementSettings::setBacklightBatteryLevel(int level)
+{
+    setValue(BACKLIGHT_BATTERY_LEVEL_KEY, level);
+}

@@ -60,6 +60,8 @@ BatteryWatcherSettings::BatteryWatcherSettings(QWidget *parent) :
     connect(mUi->chargeLevelSlider, SIGNAL(valueChanged(int)), this, SLOT(updatePreview()));
     connect(&mChargingIconProducer, SIGNAL(iconChanged()), this, SLOT(onChargeIconChanged()));
     connect(&mDischargingIconProducer, SIGNAL(iconChanged()), this, SLOT(onDischargeIconChanged()));
+    connect(mUi->backlightACSlider, SIGNAL(valueChanged(int)), this, SLOT(saveSettings()));
+    connect(mUi->backlightBatterySlider, SIGNAL(valueChanged(int)), this, SLOT(saveSettings()));
     updatePreview();
 }
 
@@ -76,6 +78,8 @@ void BatteryWatcherSettings::loadSettings()
     mUi->levelSpinBox->setValue(mSettings.getPowerLowLevel());
     mUi->showIconCheckBox->setChecked(mSettings.isShowIcon());
     mUi->useThemeIconsCheckBox->setChecked(mSettings.isUseThemeIcons());
+    mUi->backlightACSlider->setValue(mSettings.getBacklightACLevel());
+    mUi->backlightBatterySlider->setValue(mSettings.getBacklightBatteryLevel());
 }
 
 void BatteryWatcherSettings::saveSettings()
@@ -86,6 +90,8 @@ void BatteryWatcherSettings::saveSettings()
     mSettings.setPowerLowLevel(mUi->levelSpinBox->value());
     mSettings.setShowIcon(mUi->showIconCheckBox->isChecked());
     mSettings.setUseThemeIcons(mUi->useThemeIconsCheckBox->isChecked());
+    mSettings.setBacklightACLevel(mUi->backlightACSlider->value());
+    mSettings.setBacklightBatteryLevel(mUi->backlightBatterySlider->value());
 }
 
 void BatteryWatcherSettings::updatePreview()

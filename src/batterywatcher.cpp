@@ -36,9 +36,12 @@
 #include <Solid/Battery>
 
 #include "batterywatcher.h"
+#include "backlight/sysbacklight.h"
+#include "backlight/xrandrbacklight.h"
 #include "../config/powermanagementsettings.h"
 
-BatteryWatcher::BatteryWatcher(QObject *parent) : Watcher(parent)
+BatteryWatcher::BatteryWatcher(QObject *parent) : Watcher(parent),
+    mBacklight(new Backlight(this))
 {
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::Battery, QString());
 
@@ -57,7 +60,7 @@ BatteryWatcher::BatteryWatcher(QObject *parent) : Watcher(parent)
 			continue;
 		}
         mBatteries << battery;
-        connect(battery, &Solid::Battery::energyChanged, this, &BatteryWatcher::batteryChanged);
+        connect(battery, &Solid::Battery::energyChanged, this, &BatteryWatcher::energyChanged);
         connect(battery, &Solid::Battery::chargeStateChanged, this, &BatteryWatcher::batteryChanged);
     }
 
@@ -74,7 +77,37 @@ BatteryWatcher::~BatteryWatcher()
 {
 }
 
+void BatteryWatcher::updateBacklightLevel()
+{
+    if(mBacklight != nullptr && mBacklight->isSupported()){
+        bool discharging = true;
+
+        foreach (Solid::Battery *battery, mBatteries)
+        {
+            discharging &= (battery->chargeState() == Solid::Battery::Discharging);
+        }
+
+        int level = 100;
+        if(discharging){
+            level = mSettings.getBacklightBatteryLevel();
+        } else {
+            level = mSettings.getBacklightACLevel();
+        }
+
+        long actual_level = mBacklight->levelMax()*level/100;
+        qDebug() << "Setting backlight level: " << actual_level;
+
+        mBacklight->setLevel(actual_level);
+    }
+}
+
 void BatteryWatcher::batteryChanged()
+{
+    updateBacklightLevel();
+    energyChanged();
+}
+
+void BatteryWatcher::energyChanged()
 {
     static QTime actionTime;
     static LXQt::Notification *notification = 0;
@@ -93,7 +126,7 @@ void BatteryWatcher::batteryChanged()
 
     chargeLevel = 100 * totalEnergyNow / totalEnergyFull;
 
-    qDebug() <<  "BatteryChanged"
+    qDebug() <<  "EnergyChanged"
              <<  "discharging:" << discharging
              <<  "chargeLevel:" << chargeLevel
              <<  "actionTime:"  << actionTime;
@@ -173,5 +206,7 @@ void BatteryWatcher::settingsChanged()
             mTrayIcons.last()->show();
         }
     }
+
+    updateBacklightLevel();
 }
 
