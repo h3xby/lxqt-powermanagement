@@ -32,6 +32,7 @@
 #include "idlenesswatcher.h"
 #include "lidwatcher.h"
 #include "batterywatcher.h"
+#include "dpms.h"
 
 #define CURRENT_RUNCHECK_LEVEL 1
 
@@ -39,6 +40,7 @@ PowerManagementd::PowerManagementd() :
         mBatterywatcherd(0),
         mLidwatcherd(0),
         mIdlenesswatcherd(0),
+        mDPMS(0),
         mSettings()
  {
     connect(&mSettings, SIGNAL(settingsChanged()), this, SLOT(settingsChanged()));
@@ -85,6 +87,14 @@ void PowerManagementd::settingsChanged()
         mIdlenesswatcherd = 0;
     }
 
+    if (mSettings.isDPMSEnabled() && !mDPMS)
+    {
+        mDPMS = new DPMS(this);
+    } else if (mDPMS && !mSettings.isDPMSEnabled())
+    {
+        mDPMS->deleteLater();
+        mDPMS = 0;
+    }
 }
 
 void PowerManagementd::runConfigure()

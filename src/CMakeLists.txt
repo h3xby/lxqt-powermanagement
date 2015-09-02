@@ -16,6 +16,7 @@ set(SOURCES
     trayicon.cpp
     iconproducer.cpp
     x11helper.cpp
+    dpms.cpp
     ../config/powermanagementsettings.cpp
 )
 
