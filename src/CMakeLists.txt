@@ -20,6 +20,7 @@ set(SOURCES
     backlight/backlightprovider.cpp
     backlight/xrandrbacklight.cpp
     backlight/sysbacklight.cpp
+    dpms.cpp
     ../config/powermanagementsettings.cpp
 )
 

@@ -95,6 +95,18 @@ public:
 
     int getBacklightACLevel();
     void setBacklightACLevel(int level);
+
+    bool isDPMSEnabled();
+    void setDPMSEnabled(bool enabled);
+
+    int getDisplayStandbyTimeout();
+    void setDisplayStandbyTimeout(int);
+
+    int getDisplaySuspendTimeout();
+    void setDisplaySuspendTimeout(int);
+
+    int getDisplayOffTimeout();
+    void setDisplayOffTimeout(int);
 };
 
 

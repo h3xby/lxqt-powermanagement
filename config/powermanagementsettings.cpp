@@ -49,6 +49,10 @@ namespace PowerManagementSettingsConstants
     const QString IDLENESS_TIME_SECS_KEY = "idlenessTimeSecs";
     const QString BACKLIGHT_BATTERY_LEVEL_KEY = "backlightBatteryLevel";
     const QString BACKLIGHT_AC_LEVEL_KEY = "backlightACLevel";
+    const QString ENABLE_DPMS_KEY = "enableDPMS";
+    const QString DISPLAY_STANDBY_TIMEOUT_KEY = "displayStandbyTimeout";
+    const QString DISPLAY_SUSPEND_TIMEOUT_KEY = "displaySuspendTimeout";
+    const QString DISPLAY_OFF_TIMEOUT_KEY = "displayOffTimeout";
 }
 
 using namespace PowerManagementSettingsConstants;
@@ -243,3 +247,44 @@ void PowerManagementSettings::setBacklightBatteryLevel(int level)
 {
     setValue(BACKLIGHT_BATTERY_LEVEL_KEY, level);
 }
+
+int PowerManagementSettings::getDisplayStandbyTimeout()
+{
+    return value(DISPLAY_STANDBY_TIMEOUT_KEY, 0).toInt();
+}
+
+void PowerManagementSettings::setDisplayStandbyTimeout(int timeout)
+{
+    setValue(DISPLAY_STANDBY_TIMEOUT_KEY, timeout);
+}
+
+int PowerManagementSettings::getDisplaySuspendTimeout()
+{
+    return value(DISPLAY_SUSPEND_TIMEOUT_KEY, 0).toInt();
+}
+
+void PowerManagementSettings::setDisplaySuspendTimeout(int timeout)
+{
+    setValue(DISPLAY_SUSPEND_TIMEOUT_KEY, timeout);
+}
+
+int PowerManagementSettings::getDisplayOffTimeout()
+{
+    return value(DISPLAY_OFF_TIMEOUT_KEY, 0).toInt();
+}
+
+void PowerManagementSettings::setDisplayOffTimeout(int timeout)
+{
+    setValue(DISPLAY_OFF_TIMEOUT_KEY, timeout);
+}
+
+bool PowerManagementSettings::isDPMSEnabled()
+{
+    return value(ENABLE_DPMS_KEY, false).toBool();
+}
+
+void PowerManagementSettings::setDPMSEnabled(bool enabled)
+{
+    setValue(ENABLE_DPMS_KEY, enabled);
+}
+

@@ -29,6 +29,7 @@
 #include "lidwatchersettings.h"
 #include "batterywatchersettings.h"
 #include "idlenesswatchersettings.h"
+#include "dpmssettings.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     LXQt::ConfigDialog(tr("Power Management Settings"), new PowerManagementSettings(parent))
@@ -44,6 +45,10 @@ MainWindow::MainWindow(QWidget *parent) :
     IdlenessWatcherSettings* idlenessWatcherSettings = new IdlenessWatcherSettings(this);
     addPage(idlenessWatcherSettings, tr("Idle"), (QStringList() << "user-idle" << "user-away"));
     connect(this, SIGNAL(reset()), idlenessWatcherSettings, SLOT(loadSettings()));
+
+    DPMSSettings* dpmsSettings = new DPMSSettings(this);
+    addPage(dpmsSettings, tr("Display"), "display");
+    connect(this, SIGNAL(reset()), dpmsSettings, SLOT(loadSettings()));
 
     emit reset();
 }
